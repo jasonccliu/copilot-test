@@ -79,19 +79,26 @@ function getFilteredTodos() {
   return todos;
 }
 
+// 這個函式用來取得目前篩選條件下的空白提示文字。
+function getEmptyStateMessage() {
+  if (currentFilter === 'all') {
+    return '還沒有任何待辦事項,新增一個吧!';
+  }
+
+  if (currentFilter === 'active') {
+    return '目前沒有未完成的待辦事項。已完成的項目不會在這裡顯示。';
+  }
+
+  return '目前沒有已完成的待辦事項。已取消勾選的項目會回到未完成清單，不會被刪除。';
+}
+
 // 這個函式會重新渲染待辦列表，包含空白提示與未完成數量。
 function renderTodos() {
   const filteredTodos = getFilteredTodos();
   todoList.innerHTML = '';
 
   if (filteredTodos.length === 0) {
-    if (currentFilter === 'all') {
-      emptyState.textContent = '還沒有任何待辦事項,新增一個吧!';
-    } else if (currentFilter === 'active') {
-      emptyState.textContent = '目前沒有未完成的待辦事項';
-    } else {
-      emptyState.textContent = '目前沒有已完成的待辦事項';
-    }
+    emptyState.textContent = getEmptyStateMessage();
     emptyState.hidden = false;
   } else {
     emptyState.hidden = true;
