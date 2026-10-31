@@ -253,6 +253,31 @@ body {
   color: var(--text-color);
   font-size: 0.98rem;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.clear-completed-button {
+  border: 1px solid var(--border-color);
+  background: var(--filter-bg);
+  color: var(--text-color);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.clear-completed-button:hover {
+  background: var(--filter-active-bg);
+  color: var(--filter-active-text);
+}
+
+.clear-completed-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @media (max-width: 480px) {
@@ -280,6 +305,11 @@ body {
 
   .filter-group {
     flex-wrap: wrap;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .todo-item {
