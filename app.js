@@ -10,6 +10,7 @@ const emptyState = document.getElementById('emptyState');
 const remainingCount = document.getElementById('remainingCount');
 const themeToggle = document.getElementById('themeToggle');
 const filterButtons = document.querySelectorAll('.filter-button');
+const clearCompletedButton = document.getElementById('clearCompletedButton');
 
 // 先從 localStorage 讀取資料，若不存在則使用空陣列。
 let todos = loadTodos();
@@ -92,6 +93,19 @@ function getEmptyStateMessage() {
   return '目前沒有已完成的待辦事項。已取消勾選的項目會回到未完成清單，不會被刪除。';
 }
 
+// 這個函式會更新清除已完成按鈕的顯示狀態。
+function updateClearCompletedButton() {
+  const completedCount = todos.filter((todo) => todo.completed).length;
+
+  if (completedCount === 0) {
+    clearCompletedButton.hidden = true;
+    return;
+  }
+
+  clearCompletedButton.hidden = false;
+  clearCompletedButton.disabled = false;
+}
+
 // 這個函式會重新渲染待辦列表，包含空白提示與未完成數量。
 function renderTodos() {
   const filteredTodos = getFilteredTodos();
@@ -107,6 +121,7 @@ function renderTodos() {
   // 底部未完成數字會顯示整體數量，不受篩選影響。
   const incompleteCount = todos.filter((todo) => !todo.completed).length;
   remainingCount.textContent = String(incompleteCount);
+  updateClearCompletedButton();
 
   // 依序建立每一筆待辦項目。
   filteredTodos.forEach((todo) => {
@@ -196,6 +211,25 @@ filterButtons.forEach((button) => {
 
     renderTodos();
   });
+});
+
+// 這個事件會在點擊清除已完成按鈕時，批次刪除所有已完成的待辦。
+clearCompletedButton.addEventListener('click', () => {
+  const completedCount = todos.filter((todo) => todo.completed).length;
+
+  if (completedCount === 0) {
+    return;
+  }
+
+  const confirmed = window.confirm('確定要清除所有已完成的待辦事項嗎？');
+
+  if (!confirmed) {
+    return;
+  }
+
+  todos = todos.filter((todo) => !todo.completed);
+  saveTodos();
+  renderTodos();
 });
 
 // 這個事件會在作業系統主題改變時，自動更新深淺色模式，但只有在使用者沒有手動儲存設定時才生效。
